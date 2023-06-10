@@ -22,14 +22,14 @@ const prepareFillingDate = async (wordLength) => {
 const fillWords = async (wordLength, fillStartDate, fillEndDate) => {
 
     if (fillEndDate.diff(fillStartDate, 'd') < 0) {
-        console.log('Already filled with required interval');
+        console.log('Already filled with required interval', wordLength);
         return;
     }
 
     let newWordsCountToFill = fillEndDate.diff(fillStartDate, 'd') + 1;
 
 
-    console.log('ddddddd starting to fill from ', {
+    console.log('ddddddd starting to', wordLength, ' fill from ', {
         start: fillStartDate.format('YYYY-MM-DD'),
         end: fillEndDate.format('YYYY-MM-DD'),
         newWordsCountToFill,
@@ -48,7 +48,7 @@ const fillWords = async (wordLength, fillStartDate, fillEndDate) => {
         ]);
         fillStartDate.add(1, 'd');
     }
-    console.log('data to insert', dataToInsert);
+    console.log('data to insert', dataToInsert.length);
     dataToInsert.length && await createWords([dataToInsert]);
 }
 

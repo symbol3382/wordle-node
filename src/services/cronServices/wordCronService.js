@@ -8,7 +8,7 @@ const {prepareFillingDate, fillWords} = require("./cronService");
 const fillNextDaysWords = async () => {
     let wordLengthRange = await getWordsLengthRange();
     if (wordLengthRange && wordLengthRange.length && wordLengthRange[0].min && wordLengthRange[0].max) {
-        for (let i = wordLengthRange[0].min; i < wordLengthRange[0].max; i++) {
+        for (let i = wordLengthRange[0].min; i <= wordLengthRange[0].max; i++) {
             let {startDate, endDate} = await prepareFillingDate(i);
             await fillWords(i, startDate, endDate);
         }
