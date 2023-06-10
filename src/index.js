@@ -14,6 +14,13 @@ app.use(guessRoutes);
 app.use(cronRoutes);
 mysql.init();
 
-app.listen(process.env.APP_PORT, () => {
-    console.log('APP Started on ', process.env.APP_PORT);
-})
+const hostname = process.env.NODE_HOSTNAME;
+if (hostname) {
+    app.listen(process.env.APP_PORT, hostname, () => {
+        console.log('APP Started on ', process.env.APP_PORT, hostname);
+    })
+} else {
+    app.listen(process.env.APP_PORT, () => {
+        console.log('APP Started on ', process.env.APP_PORT);
+    })
+}
