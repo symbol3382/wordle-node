@@ -1,6 +1,6 @@
 const express = require('express');
+const {fillNextDaysWords} = require("../services/cronServices/wordCronService");
 const cronRoutes = express();
-const {fillNextDaysWords} = require("../services/wordService");
 
 cronRoutes.post('/cron/word-of-days', () => fillNextDaysWords());
 
