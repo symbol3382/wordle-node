@@ -1,6 +1,7 @@
+require('dotenv').config();
 const config = {
-    minWordsLength: 2,
-    maxWordsLength: 15,
+    minWordsLength: 3,
+    maxWordsLength: 7,
 }
 
 module.exports = {
