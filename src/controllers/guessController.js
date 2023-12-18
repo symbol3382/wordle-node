@@ -1,9 +1,10 @@
 const {getWordByName} = require("../repositories/wordRepo");
 const {getTodayWord} = require("../repositories/wordOfDayRepo");
 const {fillNextDaysWords} = require("../services/cronServices/wordCronService");
+const { getIO } = require('../sockets/socketServer')
 const checkWord = async (req, res) => {
     try {
-        let {word} = req.body;
+        let {word, roomId} = req.body;
         let dbWords = await getWordByName(word);
 
         if (!dbWords.length) {
@@ -31,14 +32,16 @@ const checkWord = async (req, res) => {
             result: [],
         };
         if (todayWord === word) {
-            return res.json({
+            const response = {
                 status: true,
                 data: {
                     word,
                     match: true,
                     result: Array(word.length).fill(1),
                 }
-            })
+            }
+            roomId && sendResponseToRoom(roomId, response) //send a response to all users connected in the room.    
+            return res.json(response)
         } else {
             Array.from(todayWord).forEach((todayWordChar, index) => {
                 if (todayWordChar === word[index]) {
@@ -51,16 +54,24 @@ const checkWord = async (req, res) => {
                     result.result[index] = 0;
                 }
             })
-            return res.json({
+            const response = {
                 status: true,
                 data: result
-            })
+            }
+            roomId && sendResponseToRoom(roomId, response)  //send a response to all users connected in the room.    
+            return res.json(response)
         }
 
     } catch (e) {
         return e.message;
     }
 
+}
+
+
+const sendResponseToRoom = (roomId, response) => {
+    const io = getIO()
+    io.to(roomId).emit('response', response)
 }
 
 
