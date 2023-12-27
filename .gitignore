@@ -134,3 +134,5 @@ dist
 .idea
 
 pm2.local.json
+
+package-lock.json
