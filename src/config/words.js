@@ -1,6 +1,6 @@
 require('dotenv').config();
 const config = {
-    minWordsLength: 3,
+    minWordsLength: 4,
     maxWordsLength: 7,
 }
 

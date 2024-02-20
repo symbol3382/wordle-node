@@ -6,6 +6,7 @@ const wordConfig = require('../src/config/words')
  * @returns { Promise<void> }
  */
 exports.seed = async function (knex) {
+    console.log("running words");
     let minWordLength = wordConfig.config.minWordsLength;
     let maxWordLength = wordConfig.config.maxWordsLength;
 
@@ -17,6 +18,7 @@ exports.seed = async function (knex) {
         })
     }
 
-    await knex('words').truncate();
-    await knex('words').insert(dataToInsert);
+    await knex.raw('SET FOREIGN_KEY_CHECKS=0');
+    await knex('dictionary_words').truncate();
+    await knex('dictionary_words').insert(dataToInsert);
 };

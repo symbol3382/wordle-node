@@ -1,6 +1,6 @@
 const {getWordByName} = require("../repositories/wordRepo");
 const {getTodayWord} = require("../repositories/wordOfDayRepo");
-const {fillNextDaysWords} = require("../services/cronServices/wordCronService");
+const {syncTodayWord} = require("../services/cronServices/wordCronService");
 const checkWord = async (req, res) => {
     try {
         let {word} = req.body;
@@ -10,13 +10,14 @@ const checkWord = async (req, res) => {
             return res.status(422).json({
                 status: false,
                 messages: {
-                    word: ['Word does not exists !']
+                    word: ['Word does not exists !'],
                 }
             })
         }
 
         let todayWord = await getTodayWord(word.length);
         if (!todayWord.length) {
+            await syncTodayWord(word.length);
             return res.status(500).json({
                 status: false,
                 message: "No word found for today"

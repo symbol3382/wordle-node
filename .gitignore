@@ -136,3 +136,4 @@ dist
 pm2.local.json
 
 package-lock.json
+.vscode
