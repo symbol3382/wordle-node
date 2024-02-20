@@ -41,17 +41,8 @@ const checkWord = async (req, res) => {
                 }
             })
         } else {
-            Array.from(todayWord).forEach((todayWordChar, index) => {
-                if (todayWordChar === word[index]) {
-                    // same char , correct position
-                    result.result[index] = 1;
-                } else if (todayWord.includes(word[index])) {
-                    // correct char, but wrong position
-                    result.result[index] = -1;
-                } else {
-                    result.result[index] = 0;
-                }
-            })
+            result.result = matchWordWithResult();
+            
             return res.json({
                 status: true,
                 data: result
@@ -59,11 +50,44 @@ const checkWord = async (req, res) => {
         }
 
     } catch (e) {
-        return e.message;
+        console.error(e);
+        return res.json({
+            status: false,
+            message: "Internal Server Error",
+        }, 500)
+
     }
 
 }
 
+
+const matchWordWithResult = (todayWord, word) => {
+    let result = [];
+    todayWord = todayWord.split('');
+    word = word.split('')
+    const skipDelimiter = '_';
+    todayWord.forEach((todayWordChar, index) => {
+        if (todayWordChar === word[index]) {
+            // same char , correct position
+            result[index] = 1;
+            word[index] = skipDelimiter
+            todayWord[index] = skipDelimiter
+        }
+    })
+    word.forEach((wordChar, index) => {
+        if(wordChar === skipDelimiter) {
+            return;
+        }
+        let matchIndex = null;
+        if((matchIndex = todayWord.indexOf(wordChar)) > 0) {
+            result[index] = -1;
+            todayWord[matchIndex] = skipDelimiter;
+        } else {
+            result[index] = 0;
+        }
+    })
+    return result;
+}
 
 module.exports = {
     checkWord: checkWord

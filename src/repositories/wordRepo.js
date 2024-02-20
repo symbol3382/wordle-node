@@ -1,11 +1,11 @@
 const {execute} = require("./baseRepo");
 const getLast100Words = length => {
-    const query = `SELECT wd.word_id, w.word_name from word_of_days as wd join words as w on w.id = wd.word_id where w.length=? LIMIT ?`;
+    const query = `SELECT wd.word_id, w.word_name from word_of_days as wd join dictionary_words as w on w.id = wd.word_id where w.length=? LIMIT ?`;
     return execute(query, [length, 100])
 }
 
 const getWordsWithExclude = (excluded = [], length, limit) => {
-    let query = 'SELECT * FROM words WHERE  length= ?';
+    let query = 'SELECT * FROM dictionary_words WHERE  length= ?';
     let preparedStatement = [length];
     if(excluded && excluded.length) {
         query += ` and word_name not in (?)`
@@ -22,12 +22,12 @@ const createWords = (dataToInsert) => {
 }
 
 const getWordsLengthRange = () => {
-    const query = `SELECT MIN(length) as min, MAX(length) as max FROM words`;
+    const query = `SELECT MIN(length) as min, MAX(length) as max FROM dictionary_words`;
     return execute(query);
 }
 
 const getWordByName = (wordName) => {
-    const query = `SELECT * FROM words where word_name=?`;
+    const query = `SELECT * FROM dictionary_words where word_name=?`;
     return execute(query, [wordName]);
 }
 
