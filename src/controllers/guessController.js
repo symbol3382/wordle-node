@@ -41,7 +41,7 @@ const checkWord = async (req, res) => {
                 }
             })
         } else {
-            result.result = matchWordWithResult();
+            result.result = matchWordWithResult(todayWord, word);
             
             return res.json({
                 status: true,
