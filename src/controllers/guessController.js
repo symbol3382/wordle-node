@@ -83,7 +83,7 @@ const matchWordWithResult = (todayWord, word) => {
             return;
         }
         let matchIndex = null;
-        if((matchIndex = todayWord.indexOf(wordChar)) > 0) {
+        if((matchIndex = todayWord.indexOf(wordChar)) >= 0) {
             result[index] = -1;
             todayWord[matchIndex] = skipDelimiter;
         } else {
