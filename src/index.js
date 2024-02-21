@@ -7,6 +7,7 @@ const mysql = require("./config/db");
 const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(guessRoutes);
 app.use(cronRoutes);
+app.use('/admin', adminRoutes);
 mysql.init();
 
 const hostname = process.env.NODE_HOSTNAME;
