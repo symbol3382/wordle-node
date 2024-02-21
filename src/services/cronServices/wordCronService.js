@@ -9,7 +9,7 @@ const dateFormat = "YYYY-MM-DD";
 
 /**
  * @description This method will fill the next 30 days
- * @note this will check the next 30 days should not be repeated from last 200 days
+ * @note this will check the next 30 days should not be repeated from last 120 days
  * 
  * @param {Number} days 
  */
@@ -39,9 +39,8 @@ const syncWords = async (days = 30) => {
  * @param {import("moment").Moment} date 
  */
 const getRandomWordByLength = async (wordLength, date) => {
-    console.log("syncing the word for ", date.format('L'), wordLength);
     const unusedCommonWords = await getUnusedCommonWords(
-        date.clone().subtract(200, 'd').format(dateFormat),
+        date.clone().subtract(150, 'd').format(dateFormat),
         date.format(dateFormat),
         wordLength
     );
@@ -56,6 +55,5 @@ const getRandomInt = (min, max) => {
 }
 
 module.exports = {
-    syncTodayWord: () => { },
     syncWords: syncWords,
 }

@@ -5,7 +5,7 @@ const getLatestDate = (wordLength) => {
 }
 
 const getTodayWord = (length) => {
-    const query = `SELECT w.word_name
+    const query = `SELECT d.id AS word_of_day_id, w.word_name
         FROM word_of_days as d 
         LEFT JOIN dictionary_words as w 
         ON w.id = d.word_id 
@@ -24,6 +24,15 @@ const getWordsOfDay = (date) => {
         d.word_date = ?
     `
     return execute(query, [date]);
+}
+
+const updateWordGuessCount = (wordDayId) => {
+    const query = `UPDATE word_of_days 
+        SET guess_count = guess_count+1
+        WHERE id = ?
+    `
+
+    return execute(query, [wordDayId]);
 }
 
 const getUnusedCommonWords = (startDate, endDate, wordLength) => {
@@ -54,4 +63,5 @@ module.exports = {
     getTodayWord: getTodayWord,
     getWordsOfDay: getWordsOfDay,
     getUnusedCommonWords: getUnusedCommonWords,
+    updateWordGuessCount: updateWordGuessCount,
 }

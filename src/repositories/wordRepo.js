@@ -31,10 +31,16 @@ const getWordByName = (wordName) => {
     return execute(query, [wordName]);
 }
 
+const updateWordUseCount = (wordName) => {
+    const query = `UPDATE dictionary_words SET used_count = used_count + 1 WHERE word_name = ?`
+    return execute(query, [wordName]);
+}
+
 module.exports = {
     getLast100Words: getLast100Words,
     getWordsWithExclude: getWordsWithExclude,
     createWords: createWords,
     getWordsLengthRange: getWordsLengthRange,
     getWordByName: getWordByName,
+    updateWordUseCount: updateWordUseCount,
 }

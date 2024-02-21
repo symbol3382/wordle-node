@@ -1,6 +1,6 @@
-const {getWordByName} = require("../repositories/wordRepo");
-const {getTodayWord} = require("../repositories/wordOfDayRepo");
-const {syncTodayWord} = require("../services/cronServices/wordCronService");
+const {getWordByName, updateWordUseCount} = require("../repositories/wordRepo");
+const {getTodayWord, updateWordGuessCount} = require("../repositories/wordOfDayRepo");
+const {syncTodayWord, syncWords} = require("../services/cronServices/wordCronService");
 const checkWord = async (req, res) => {
     try {
         let {word} = req.body;
@@ -17,21 +17,25 @@ const checkWord = async (req, res) => {
 
         let todayWord = await getTodayWord(word.length);
         if (!todayWord.length) {
-            await syncTodayWord(word.length);
+            await syncWords();
+            todayWord = await getTodayWord(word.length);
+            if (!todayWord.length) {
             return res.status(500).json({
                 status: false,
                 message: "No word found for today"
             });
+            }
         }
 
         todayWord = todayWord[0].word_name;
-
         let result = {
             word,
             match: false,
             result: [],
         };
+        await updateWordUseCount(word);
         if (todayWord === word) {
+            await updateWordGuessCount(todayWord[0].word_of_day_id)
             return res.json({
                 status: true,
                 data: {
