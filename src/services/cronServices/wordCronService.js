@@ -22,7 +22,8 @@ const syncWords = async (days = 30) => {
         let dateStr = date.format(dateFormat);
         let dateWords = await getWordsOfDay(dateStr);
         for (let wordLength = minWords; wordLength <= maxWords; wordLength++) {
-            let dateWord = dateWords.find(word => word.length === wordLength);
+            console.log('word length', wordLength);
+            let dateWord = dateWords.find(word => word?.word_name?.length === wordLength);
             if(!dateWord) {
                 let randomWord = await getRandomWordByLength(wordLength, date);
                 pool.query('INSERT INTO word_of_days (word_id, word_date) VALUES(?)', [[randomWord, dateStr]])

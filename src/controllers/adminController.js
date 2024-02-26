@@ -1,20 +1,29 @@
 const { config } = require("../config/words");
-const { getTodayWord } = require("../repositories/wordOfDayRepo");
+const { getTodayWord, getWordsOfDay } = require("../repositories/wordOfDayRepo");
+const { syncWords } = require("../services/cronServices/wordCronService");
 
 const getStatistics = async (req, res) => {
     try {
-        const todayWords = [];
-        for(let i = config.minWordsLength; i<= config.maxWordsLength; i++) {
-            let word = await getTodayWord(i);
-            word.length && todayWords.push({
-                word_length: i,
-                word_name: word[0].word_name,
-                guess_count: word[0].guess_count || 0,
-            })
-        }
+        let date = req.query.date;
+        console.log(date);
+        let words = await getWordsOfDay(date);
+        console.log("Filter result",  words
+        .filter(word => {
+            console.log('word length', word.length, config.minWordsLength, config.maxWordsLength)
+            return word?.length >= config.minWordsLength && word.length <= config.maxWordsLength})
+        )
+        let resultWords = words
+        .filter(word => word.length >= config.minWordsLength && word.length <= config.maxWordsLength)
+        .map(word => {
+                return {
+                    guess_count: word.guess_count, 
+                    word_length: word.length, 
+                    word_name: word.word_name
+                }
+        })
 
         return res.json({
-            today_words: todayWords
+            today_words: resultWords,
         })
 
     } catch (e) {
@@ -26,6 +35,11 @@ const getStatistics = async (req, res) => {
     }
 }
 
+const adminSyncWords = (req, res) => {
+    syncWords();
+}
+
 module.exports = {
-    getStatistics: getStatistics
+    getStatistics: getStatistics,
+    adminSyncWords: adminSyncWords,
 }

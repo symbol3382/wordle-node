@@ -15,14 +15,26 @@ const getTodayWord = (length) => {
     return execute(query, [length]);
 }
 
-const getWordsOfDay = (date) => {
-    const query = `SELECT w.word_name, w.length
+const getWordsOfDay = (date = 'CURDATE()') => {
+    const query = `SELECT d.id AS word_of_day_id, w.word_name, d.guess_count, w.length
     FROM word_of_days as d 
     LEFT JOIN dictionary_words as w 
     ON w.id = d.word_id
     WHERE
         d.word_date = ?
     `
+
+    console.log(`
+    
+    
+    
+    SELECT d.id AS word_of_day_id, w.word_name, d.guess_count
+    FROM word_of_days as d 
+    LEFT JOIN dictionary_words as w 
+    ON w.id = d.word_id
+    WHERE
+        d.word_date = '${date}'
+    `)
     return execute(query, [date]);
 }
 
