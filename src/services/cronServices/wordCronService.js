@@ -18,7 +18,7 @@ const syncWords = async (days = 30) => {
     const maxWords = config.maxWordsLength;
 
     const date = moment();
-    for (let day = 0; day < 30; day++) {
+    for (let day = 0; day < days; day++) {
         let dateStr = date.format(dateFormat);
         let dateWords = await getWordsOfDay(dateStr);
         for (let wordLength = minWords; wordLength <= maxWords; wordLength++) {

@@ -36,7 +36,7 @@ const getStatistics = async (req, res) => {
 }
 
 const adminSyncWords = (req, res) => {
-    syncWords();
+    syncWords().then(() => res.json({status: true})).catch(e => {res.json(e)});
 }
 
 module.exports = {
